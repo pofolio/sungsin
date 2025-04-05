@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>디자이너 포트폴리오</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+        }
+
+        :root {
+            --primary-color: #333;
+            --secondary-color: #666;
+            --accent-color: #ff5500;
+            --background-color: #ffffff;
+            --secondary-bg: #f5f5f5;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--primary-color);
+            line-height: 1.6;
+        }
+
+        /* 접근성 강화 요소 */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--accent-color);
+            color: white;
+            padding: 8px;
+            z-index: 1000;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* 레이아웃 */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-md);
+        }
+
+        /* 헤더 스타일 */
+        header {
+            padding: var(--spacing-lg) 0;
+            background-color: var(--background-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo a {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        /* 네비게이션 */
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: var(--spacing-lg);
+        }
+
+        nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: var(--spacing-sm) 0;
+        }
+
+        nav a:hover::after,
+        nav a:focus::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: var(--accent-color);
+            bottom: 0;
+            left: 0;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* 히어로 섹션 */
+        .hero {
+            padding: var(--spacing-xl) 0;
+            display: flex;
+            align-items: center;
+            min-height: 80vh;
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xl);
+        }
+
+        .hero-text {
+            flex: 1;
+        }
+
+        .hero-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: var(--spacing-md);
+            line-height: 1.2;
+        }
+
+        .accent {
+            color: var(--accent-color);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: var(--spacing-md) var(--spacing-lg);
+            background-color: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta-button:hover,
+        .cta-button:focus {
+            background-color: #e04900;
+        }
+
+        /* 포트폴리오 섹션 */
+        .portfolio {
+            padding: var(--spacing-xl) 0;
+            background-color: var(--secondary-bg);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+            font-size: 2rem;
+        }
+
+        .portfolio-filter {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            flex-wrap: wrap;
+        }
+
+        .filter-button {
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: none;
+            border: 1px solid var(--secondary-color);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-button:hover,
+        .filter-button:focus,
+        .filter-button.active {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .portfolio-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .portfolio-item img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+            display: block;
+        }
+
+        .portfolio-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .portfolio-item-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: var(--spacing-md);
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .portfolio-item:hover .portfolio-item-overlay,
+        .portfolio-item:focus-within .portfolio-item-overlay {
+            transform: translateY(0);
+        }
+
+        .portfolio-item-title {
+            font-size: 1.2rem;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .portfolio-item-category {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+        }
+
+        /* 소개 섹션 */
+        .about {
+            padding: var(--spacing-xl) 0;
+        }
+
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xl);
+        }
+
+        .about-image {
+            flex: 1;
+        }
+
+        .about-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 3px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .skills {
+            margin-top: var(--spacing-lg);
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-md);
+        }
+
+        .skill-tag {
+            background-color: var(--secondary-bg);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* 서비스 섹션 */
+        .services {
+            padding: var(--spacing-xl) 0;
+            background-color: var(--secondary-bg);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .service-card {
+            background-color: var(--background-color);
+            padding: var(--spacing-lg);
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover,
+        .service-card:focus-within {
+            transform: translateY(-10px);
+        }
+
+        .service-icon {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .service-title {
+            margin-bottom: var(--spacing-md);
+        }
+
+        /* 연락처 섹션 */
+        .contact {
+            padding: var(--spacing-xl) 0;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        label {
+            display: block;
+            margin-bottom: var(--spacing-sm);
+            font-weight: 500;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        button[type="submit"] {
+            padding: var(--spacing-md) var(--spacing-lg);
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover,
+        button[type="submit"]:focus {
+            background-color: #e04900;
+        }
+
+        /* 푸터 */
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: var(--spacing-lg) 0;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .social-links {
+            display: flex;
+            gap: var(--spacing-md);
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover,
+        .social-links a:focus {
+            color: var(--accent-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: var(--spacing-lg);
+            padding-top: var(--spacing-md);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero-content,
+            .about-content {
+                flex-direction: column;
+            }
+
+            .hero-image,
+            .about-image {
+                order: -1;
+                margin-bottom: var(--spacing-lg);
+            }
+
+            .portfolio-grid,
+            .services-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: var(--background-color);
+                flex-direction: column;
+                padding: var(--spacing-md);
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            nav ul.active {
+                display: flex;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: var(--spacing-lg);
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            .portfolio-grid,
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .portfolio-filter {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="#main" class="skip-link">메인 콘텐츠로 건너뛰기</a>
+
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <a href="#" aria-label="홈페이지로 이동">Designer</a>
+            </div>
+            <button class="mobile-menu-btn" aria-expanded="false" aria-controls="main-menu" aria-label="메뉴 열기">
+                ☰
+            </button>
+            <nav>
+                <ul id="main-menu">
+                    <li><a href="#portfolio">포트폴리오</a></li>
+                    <li><a href="#about">소개</a></li>
+                    <li><a href="#services">서비스</a></li>
+                    <li><a href="#contact">연락처</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main">
+        <section class="hero">
+            <div class="container hero-content">
+                <div class="hero-text">
+                    <h1>안녕하세요, <span class="accent">크리에이티브 디자이너</span>입니다</h1>
+                    <p class="subtitle">시각적 스토리텔링과 사용자 중심 디자인으로 브랜드의 가치를 높입니다.</p>
+                    <a href="#portfolio" class="cta-button">작업 보기</a>
+                </div>
+                <div class="hero-image">
+                    <img src="/api/placeholder/500/500" alt="디자이너 프로필 이미지" />
+                </div>
+            </div>
+        </section>
+
+        <section id="portfolio" class="portfolio">
+            <div class="container">
+                <h2 class="section-title">포트폴리오</h2>
+                <div class="portfolio-filter" role="group" aria-label="포트폴리오 필터">
+                    <button class="filter-button active" data-filter="all">전체</button>
+                    <button class="filter-button" data-filter="ui-ux">UI/UX</button>
+                    <button class="filter-button" data-filter="graphic">그래픽 디자인</button>
+                    <button class="filter-button" data-filter="branding">브랜딩</button>
+                    <button class="filter-button" data-filter="illustration">일러스트레이션</button>
+                </div>
+                <div class="portfolio-grid">
+                    <article class="portfolio-item" data-category="ui-ux">
+                        <img src="/api/placeholder/500/400" alt="UI/UX 프로젝트 썸네일" />
+                        <div class="portfolio-item-overlay">
+                            <h3 class="portfolio-item-title">모바일 앱 디자인</h3>
+                            <p class="portfolio-item-category">UI/UX 디자인</p>
+                            <a href="#" class="portfolio-link" aria-label="모바일 앱 디자인 프로젝트 자세히 보기">자세히 보기</a>
+                        </div>
+                    </article>
+                    <article class="portfolio-item" data-category="graphic">
+                        <img src="/api/placeholder/500/400" alt="그래픽 디자인 프로젝트 썸네일" />
+                        <div class="portfolio-item-overlay">
+                            <h3 class="portfolio-item-title">브로슈어 디자인</h3>
+                            <p class="portfolio-item-category">그래픽 디자인</p>
+                            <a href="#" class="portfolio-link" aria-label="브로슈어 디자인 프로젝트 자세히 보기">자세히 보기</a>
+                        </div>
+                    </article>
+                    <article class="portfolio-item" data-category="branding">
+                        <img src="/api/placeholder/500/400" alt="브랜딩 프로젝트 썸네일" />
+                        <div class="portfolio-item-overlay">
+                            <h3 class="portfolio-item-title">카페 브랜딩</h3>
+                            <p class="portfolio-item-category">브랜딩</p>
+                            <a href="#" class="portfolio-link" aria-label="카페 브랜딩 프로젝트 자세히 보기">자세히 보기</a>
+                        </div>
+                    </article>
+                    <article class="portfolio-item" data-category="illustration">
+                        <img src="/api/placeholder/500/400" alt="일러스트레이션 프로젝트 썸네일" />
+                        <div class="portfolio-item-overlay">
+                            <h3 class="portfolio-item-title">캐릭터 디자인</h3>
+                            <p class="portfolio-item-category">일러스트레이션</p>
+                            <a href="#" class="portfolio-link" aria-label="캐릭터 디자인 프로젝트 자세히 보기">자세히 보기</a>
+                        </div>
+                    </article>
+                    <article class="portfolio-item" data-category="ui-ux">
+                        <img src="/api/placeholder/500/400" alt="웹사이트 디자인 썸네일" />
+                        <div class="portfolio-item-overlay">
+                            <h3 class="portfolio-item-title">반응형 웹사이트</h3>
+                            <p class="portfolio-item-category">UI/UX 디자인</p>
+                            <a href="#" class="portfolio-link" aria-label="반응형 웹사이트 프로젝트 자세히 보기">자세히 보기</a>
+                        </div>
+                    </article>
+                    <article class="portfolio-item" data-category="branding">
+                        <img src="/api/placeholder/500/400" alt="로고 디자인 썸네일" />
+                        <div class="portfolio-item-overlay">
+                            <h3 class="portfolio-item-title">기업 로고 디자인</h3>
+                            <p class="portfolio-item-category">브랜딩</p>
+                            <a href="#" class="portfolio-link" aria-label="기업 로고 디자인 프로젝트 자세히 보기">자세히 보기</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about">
+            <div class="container about-content">
+                <div class="about-text">
+                    <h2 class="section-title">소개</h2>
+                    <p>안녕하세요, 저는 7년차 디자이너로 사용자 중심 디자인과 창의적인 문제 해결에 집중하고 있습니다. 클라이언트와 긴밀히 협력하여 브랜드의 정체성을 효과적으로 전달하는 디자인
+                        솔루션을 제공합니다.</p>
+                    <p>다양한 분야의 프로젝트를 경험하며 UI/UX, 그래픽 디자인, 브랜딩 등 폭넓은 영역에서 전문성을 쌓아왔습니다. 사용자 경험을 최우선으로 생각하는 디자인 철학을 바탕으로
+                        기능적이면서도 아름다운 결과물을 만들어내는 것이 제 목표입니다.</p>
+
+                    <div class="skills">
+                        <h3>보유 기술</h3>
+                        <div class="skill-list">
+                            <span class="skill-tag">Adobe Photoshop</span>
+                            <span class="skill-tag">Adobe Illustrator</span>
+                            <span class="skill-tag">Figma</span>
+                            <span class="skill-tag">Sketch</span>
+                            <span class="skill-tag">UI/UX 디자인</span>
+                            <span class="skill-tag">반응형 웹 디자인</span>
+                            <span class="skill-tag">프로토타이핑</span>
+                            <span class="skill-tag">HTML/CSS</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <img src="/api/placeholder/500/600" alt="디자이너 작업 모습" />
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="services">
+            <div class="container">
+                <h2 class="section-title">서비스</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="service-icon" aria-hidden="true">🖌️</div>
+                        <h3 class="service-title">UI/UX 디자인</h3>
+                        <p>사용자 중심의 직관적인 인터페이스를 설계하고, 최적의 사용자 경험을 제공하는 디자인 솔루션을 제공합니다.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon" aria-hidden="true">🎨</div>
+                        <h3 class="service-title">그래픽 디자인</h3>
+                        <p>브로슈어, 포스터, 소셜 미디어 이미지 등 다양한 그래픽 디자인 요소를 제작하여 브랜드의 메시지를 효과적으로 전달합니다.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon" aria-hidden="true">✨</div>
+                        <h3 class="service-title">브랜드 아이덴티티</h3>
+                        <p>로고 디자인부터 브랜드 가이드라인까지, 일관된 브랜드 아이덴티티를 구축하여 차별화된 브랜드 이미지를 만들어 드립니다.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon" aria-hidden="true">📱</div>
+                        <h3 class="service-title">모바일 앱 디자인</h3>
+                        <p>사용자 친화적인 모바일 애플리케이션 인터페이스를 디자인하여 최적의 모바일 경험을 제공합니다.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon" aria-hidden="true">🖼️</div>
+                        <h3 class="service-title">일러스트레이션</h3>
+                        <p>브랜드 컨셉에 맞는 맞춤형 일러스트레이션을 제작하여 시각적인 스토리텔링을 강화합니다.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon" aria-hidden="true">🌐</div>
+                        <h3 class="service-title">웹사이트 디자인</h3>
+                        <p>반응형 웹사이트 디자인으로 모든 디바이스에서 최적화된 사용자 경험을 제공합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact">
+            <div class="container">
+                <h2 class="section-title">연락처</h2>
+                <form class="contact-form" aria-label="연락 양식">
+                    <div class="form-group">
+                        <label for="name">이름</label>
+                        <input type="text" id="name" name="name" required aria-required="true">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">이메일</label>
+                        <input type="email" id="email" name="email" required aria-required="true">
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">제목</label>
+                        <input type="text" id="subject" name="subject" required aria-required="true">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">메시지</label>
+                        <textarea id="message" name="message" rows="5" required aria-required="true"></textarea>
+                    </div>
+                    <button type="submit">메시지 보내기</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">Designer</div>
+                <div class="social-links">
+                    <a href="#" aria-label="인스타그램 프로필 방문하기">📷</a>
+                    <a href="#" aria-label="드리블 프로필 방문하기">🏀</a>
+                    <a href="#" aria-label="비핸스 프로필 방문하기">🎨</a>
+                    <a href="#" aria-label="링크드인 프로필 방문하기">💼</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 디자이너 포트폴리오. 모든 권리 보유.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 모바일 메뉴 토글
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function () {
+            const menu = document.getElementById('main-menu');
+            const expanded = this.getAttribute('aria-expanded') === 'true';
+            menu.classList.toggle('active');
+            this.setAttribute('aria-expanded', !expanded);
+            this.innerHTML = expanded ? '☰' : '✕';
+        });
+
+        // 포트폴리오 필터링
+        const filterButtons = document.querySelectorAll('.filter-button');
+        const portfolioItems = document.querySelectorAll('.portfolio-item');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // 활성 버튼 업데이트
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                const filter = button.dataset.filter;
+
+                // 포트폴리오 아이템 필터링
+                portfolioItems.forEach(item => {
+                    if (filter === 'all' || item.dataset.category === filter) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
